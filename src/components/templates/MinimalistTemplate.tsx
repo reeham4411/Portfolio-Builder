@@ -1,5 +1,6 @@
 import { PortfolioData } from "@/types/portfolio";
-import { Mail, MapPin, Github, Linkedin, ExternalLink } from "lucide-react";
+import { Mail, MapPin, ExternalLink } from "lucide-react";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function MinimalistTemplate({ data }: { data: PortfolioData }) {
   const { personalInfo: p, skills, projects, experience } = data;
@@ -33,24 +34,25 @@ export default function MinimalistTemplate({ data }: { data: PortfolioData }) {
                 {p.location}
               </span>
             )}
-            {p.github && (
-              <a
-                href={p.github}
-                className="flex items-center gap-1.5 hover:text-gray-700"
-              >
-                <Github size={14} />
-                GitHub
-              </a>
-            )}
-            {p.linkedin && (
-              <a
-                href={p.linkedin}
-                className="flex items-center gap-1.5 hover:text-gray-700"
-              >
-                <Linkedin size={14} />
-                LinkedIn
-              </a>
-            )}
+           {p.github && (
+  <a
+    href={p.github}
+    className="flex items-center gap-1.5 hover:text-gray-700"
+  >
+    <FaGithub size={14} />
+    GitHub
+  </a>
+)}
+
+{p.linkedin && (
+  <a
+    href={p.linkedin}
+    className="flex items-center gap-1.5 hover:text-gray-700"
+  >
+    <FaLinkedin size={14} />
+    LinkedIn
+  </a>
+)}
           </div>
         </header>
 
@@ -105,7 +107,7 @@ export default function MinimalistTemplate({ data }: { data: PortfolioData }) {
                           href={pr.githubUrl}
                           className="text-gray-400 hover:text-gray-700"
                         >
-                          <Github size={16} />
+                          <FaGithub size={16} />
                         </a>
                       )}
                     </div>

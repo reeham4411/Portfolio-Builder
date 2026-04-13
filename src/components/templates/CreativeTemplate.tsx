@@ -1,5 +1,6 @@
 import { PortfolioData } from "@/types/portfolio";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import { FaGithub } from "react-icons/fa";
 
 export default function CreativeTemplate({ data }: { data: PortfolioData }) {
   const { personalInfo: p, skills, projects, experience } = data;
@@ -132,7 +133,7 @@ export default function CreativeTemplate({ data }: { data: PortfolioData }) {
                         href={pr.githubUrl}
                         className="flex items-center gap-1 text-xs font-sans opacity-60 hover:opacity-100"
                       >
-                        <Github size={13} /> Code
+                         <FaGithub size={13} /> Code
                       </a>
                     )}
                   </div>

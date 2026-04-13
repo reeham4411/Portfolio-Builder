@@ -2,11 +2,9 @@ import { PortfolioData } from "@/types/portfolio";
 import {
   Mail,
   MapPin,
-  Github,
-  Linkedin,
-  ExternalLink,
   ArrowUpRight,
 } from "lucide-react";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function BoldTemplate({ data }: { data: PortfolioData }) {
   const { personalInfo: p, skills, projects, experience } = data;
@@ -58,8 +56,17 @@ export default function BoldTemplate({ data }: { data: PortfolioData }) {
                 href={p.github}
                 className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors"
               >
-                <Github size={14} />
+                <FaGithub size={14} />
                 GitHub
+              </a>
+            )}
+            {p.linkedin && (
+              <a
+                href={p.linkedin}
+                className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors"
+              >
+                <FaLinkedin size={14} />
+                LinkedIn
               </a>
             )}
           </div>

@@ -7,8 +7,6 @@ import { cn } from "@/lib/utils";
 import { TemplateId } from "@/types/portfolio";
 import Badge from "@/components/ui/Badge";
 
-// ─── Template definitions ────────────────────────────────────────────────────
-
 interface TemplateConfig {
   id: TemplateId;
   name: string;
@@ -65,55 +63,58 @@ const templates: TemplateConfig[] = [
   },
 ];
 
-// ─── Mini portfolio preview card per template ─────────────────────────────────
+// Mini portfolio preview card per template
 
 function MinimalistPreview({ accent }: { accent: string }) {
   return (
-    <div className="p-5 h-full" style={{ background: "#fff", color: "#111" }}>
-      <div className="mb-3">
+    <div className="p-6 h-full" style={{ background: "#fff", color: "#111" }}>
+      <div className="mb-4">
         <div
-          className="h-5 w-32 rounded mb-1.5"
+          className="h-6 w-36 rounded mb-2"
           style={{ background: "#111", opacity: 0.85 }}
         />
         <div
-          className="h-3 w-20 rounded"
+          className="h-4 w-24 rounded"
           style={{ background: "#888", opacity: 0.5 }}
         />
       </div>
-      <div className="flex gap-3 mb-4">
+      <div className="flex gap-3 mb-5">
         {["✉", "📍", "🐙"].map((i) => (
           <div key={i} className="flex items-center gap-1">
-            <div className="h-2 w-14 rounded" style={{ background: "#ccc" }} />
+            <div
+              className="h-2.5 w-16 rounded"
+              style={{ background: "#ccc" }}
+            />
           </div>
         ))}
       </div>
-      <div className="h-px mb-4" style={{ background: "#eee" }} />
+      <div className="h-px mb-5" style={{ background: "#eee" }} />
       <div
-        className="text-[9px] font-mono tracking-widest mb-2"
+        className="text-[10px] font-mono tracking-widest mb-2"
         style={{ color: "#aaa" }}
       >
         ABOUT
       </div>
-      <div className="space-y-1 mb-4">
+      <div className="space-y-1.5 mb-5">
         {[100, 90, 75].map((w) => (
           <div
             key={w}
-            className="h-2 rounded"
+            className="h-2.5 rounded"
             style={{ background: "#eee", width: `${w}%` }}
           />
         ))}
       </div>
       <div
-        className="text-[9px] font-mono tracking-widest mb-2"
+        className="text-[10px] font-mono tracking-widest mb-2"
         style={{ color: "#aaa" }}
       >
         SKILLS
       </div>
-      <div className="flex flex-wrap gap-1.5 mb-4">
+      <div className="flex flex-wrap gap-2 mb-5">
         {["React", "TypeScript", "Node.js", "PostgreSQL"].map((s) => (
           <span
             key={s}
-            className="px-2 py-0.5 rounded text-[8px]"
+            className="px-2.5 py-1 rounded text-[9px]"
             style={{ border: "1px solid #eee", color: "#555" }}
           >
             {s}
@@ -121,22 +122,22 @@ function MinimalistPreview({ accent }: { accent: string }) {
         ))}
       </div>
       <div
-        className="text-[9px] font-mono tracking-widest mb-2"
+        className="text-[10px] font-mono tracking-widest mb-2"
         style={{ color: "#aaa" }}
       >
         PROJECTS
       </div>
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {["Realtime Dashboard ↗", "E-Commerce Platform ↗"].map((p) => (
           <div key={p}>
             <div
-              className="text-[9px] font-semibold mb-0.5"
+              className="text-[10px] font-semibold mb-1"
               style={{ color: "#222" }}
             >
               {p}
             </div>
             <div
-              className="h-1.5 rounded w-5/6"
+              className="h-2 rounded w-5/6"
               style={{ background: "#f0f0f0" }}
             />
           </div>
@@ -149,43 +150,43 @@ function MinimalistPreview({ accent }: { accent: string }) {
 function BoldPreview({ accent }: { accent: string }) {
   return (
     <div
-      className="p-5 h-full"
+      className="p-6 h-full"
       style={{ background: "#0a0a0a", color: "#f0eff8" }}
     >
       <div
-        className="inline-block px-2 py-0.5 rounded-full mb-2 text-[8px] tracking-wider"
+        className="inline-block px-2.5 py-1 rounded-full mb-3 text-[9px] tracking-wider"
         style={{ border: `1px solid ${accent}60`, color: accent }}
       >
         FULL-STACK ENGINEER
       </div>
       <div
-        className="font-bold leading-none mb-3"
-        style={{ fontSize: 28, fontFamily: "'Playfair Display', serif" }}
+        className="font-bold leading-none mb-4"
+        style={{ fontSize: 32, fontFamily: "'Playfair Display', serif" }}
       >
         Alex
         <br />
         <span style={{ color: accent }}>Rivera</span>
       </div>
-      <div className="space-y-1 mb-4">
+      <div className="space-y-1.5 mb-5">
         {[80, 65, 55].map((w) => (
           <div
             key={w}
-            className="h-1.5 rounded"
+            className="h-2 rounded"
             style={{ background: "#222", width: `${w}%` }}
           />
         ))}
       </div>
       <div
-        className="mb-1 font-bold text-sm"
+        className="mb-2 font-bold text-base"
         style={{ fontFamily: "'Playfair Display', serif" }}
       >
         Skills<span style={{ color: accent }}>.</span>
       </div>
-      <div className="flex flex-wrap gap-1 mb-3">
+      <div className="flex flex-wrap gap-2 mb-4">
         {["React", "TypeScript", "Node.js", "Docker"].map((s) => (
           <span
             key={s}
-            className="px-2 py-0.5 rounded-full text-[8px]"
+            className="px-2.5 py-1 rounded-full text-[9px]"
             style={{
               border: "1px solid #222",
               color: "#aaa",
@@ -197,25 +198,28 @@ function BoldPreview({ accent }: { accent: string }) {
         ))}
       </div>
       <div
-        className="mb-1 font-bold text-sm"
+        className="mb-2 font-bold text-base"
         style={{ fontFamily: "'Playfair Display', serif" }}
       >
         Projects<span style={{ color: accent }}>.</span>
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-2.5">
         {["Realtime Dashboard", "E-Commerce"].map((p) => (
           <div
             key={p}
-            className="p-2 rounded-lg"
+            className="p-3 rounded-xl"
             style={{ background: "#111", border: "1px solid #1a1a1a" }}
           >
             <div
-              className="text-[8px] font-semibold mb-1"
+              className="text-[9px] font-semibold mb-1.5"
               style={{ color: "#ddd" }}
             >
               {p}
             </div>
-            <div className="h-1 rounded w-4/5" style={{ background: "#222" }} />
+            <div
+              className="h-1.5 rounded w-4/5"
+              style={{ background: "#222" }}
+            />
           </div>
         ))}
       </div>
@@ -226,9 +230,9 @@ function BoldPreview({ accent }: { accent: string }) {
 function CreativePreview({ accent }: { accent: string }) {
   return (
     <div className="h-full overflow-hidden" style={{ background: "#f7f4ef" }}>
-      <div className="p-4" style={{ background: "#1a1a1a", color: "#f7f4ef" }}>
+      <div className="p-5" style={{ background: "#1a1a1a", color: "#f7f4ef" }}>
         <div
-          className="text-[8px] tracking-widest mb-1"
+          className="text-[9px] tracking-widest mb-1.5"
           style={{ color: accent }}
         >
           FULL-STACK ENGINEER
@@ -236,7 +240,7 @@ function CreativePreview({ accent }: { accent: string }) {
         <div
           className="leading-none"
           style={{
-            fontSize: 22,
+            fontSize: 26,
             fontFamily: "'Playfair Display', serif",
             fontWeight: 900,
           }}
@@ -244,10 +248,10 @@ function CreativePreview({ accent }: { accent: string }) {
           Alex <span style={{ color: accent }}>Rivera</span>
         </div>
       </div>
-      <div className="p-4">
-        <div className="flex items-center gap-2 mb-2">
+      <div className="p-5">
+        <div className="flex items-center gap-2 mb-3">
           <div
-            className="text-[10px] font-bold"
+            className="text-xs font-bold"
             style={{
               fontFamily: "'Playfair Display', serif",
               color: "#1a1a1a",
@@ -257,7 +261,7 @@ function CreativePreview({ accent }: { accent: string }) {
           </div>
           <div className="flex-1 h-px" style={{ background: "#ddd" }} />
         </div>
-        <div className="grid grid-cols-4 gap-1.5 mb-3">
+        <div className="grid grid-cols-4 gap-2 mb-4">
           {[
             ["React", 100],
             ["Node", 80],
@@ -266,16 +270,16 @@ function CreativePreview({ accent }: { accent: string }) {
           ].map(([name, pct]) => (
             <div
               key={name}
-              className="p-1.5 rounded-lg"
+              className="p-2 rounded-lg"
               style={{ background: "#1a1a1a" }}
             >
               <div
-                className="text-[7px] font-medium mb-1.5"
+                className="text-[8px] font-medium mb-2"
                 style={{ color: "#f7f4ef" }}
               >
                 {name}
               </div>
-              <div className="h-0.5 rounded" style={{ background: "#333" }}>
+              <div className="h-1 rounded" style={{ background: "#333" }}>
                 <div
                   className="h-full rounded"
                   style={{ width: `${pct}%`, background: accent }}
@@ -284,9 +288,9 @@ function CreativePreview({ accent }: { accent: string }) {
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-3">
           <div
-            className="text-[10px] font-bold"
+            className="text-xs font-bold"
             style={{
               fontFamily: "'Playfair Display', serif",
               color: "#1a1a1a",
@@ -296,34 +300,34 @@ function CreativePreview({ accent }: { accent: string }) {
           </div>
           <div className="flex-1 h-px" style={{ background: "#ddd" }} />
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2.5">
           <div
-            className="p-2 rounded-lg"
+            className="p-3 rounded-xl"
             style={{ background: "#1a1a1a", color: "#f7f4ef" }}
           >
             <div
-              className="text-[8px] font-bold mb-0.5"
+              className="text-[9px] font-bold mb-1"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Realtime Dashboard
             </div>
             <div
-              className="h-1 rounded w-4/5 opacity-30"
+              className="h-1.5 rounded w-4/5 opacity-30"
               style={{ background: "#fff" }}
             />
           </div>
           <div
-            className="p-2 rounded-lg"
+            className="p-3 rounded-xl"
             style={{ background: "#eee8dc", color: "#1a1a1a" }}
           >
             <div
-              className="text-[8px] font-bold mb-0.5"
+              className="text-[9px] font-bold mb-1"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               E-Commerce
             </div>
             <div
-              className="h-1 rounded w-3/5 opacity-20"
+              className="h-1.5 rounded w-3/5 opacity-20"
               style={{ background: "#1a1a1a" }}
             />
           </div>
@@ -339,8 +343,6 @@ const previewComponents: Record<TemplateId, React.FC<{ accent: string }>> = {
   creative: CreativePreview,
 };
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
 export default function TemplateShowcase() {
   const [active, setActive] = useState<TemplateId>("bold");
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
@@ -349,50 +351,46 @@ export default function TemplateShowcase() {
   const Preview = previewComponents[active];
 
   return (
-    <section className="py-32 px-6 border-t border-[var(--border)]">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-40 px-8 border-t border-[var(--border)]">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
           <div>
-            <div className="text-xs font-mono tracking-[0.2em] uppercase text-[var(--text-muted)] mb-3">
-              03 — Templates
-            </div>
-            <h2 className="font-display text-5xl md:text-6xl font-black leading-tight">
+            <h2 className="font-display text-6xl md:text-7xl font-black leading-tight">
               Pick your vibe.
               <br />
               <span className="gradient-text">Switch anytime.</span>
             </h2>
           </div>
-          <p className="text-[var(--text-muted)] text-lg max-w-xs leading-relaxed">
+          <p className="text-[var(--text-muted)] text-xl md:text-2xl max-w-md leading-relaxed">
             Every template is fully responsive and production-ready out of the
             box.
           </p>
         </div>
 
         {/* Layout: tabs + live preview */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
           {/* Left: template picker tabs */}
-          <div className="lg:col-span-2 flex flex-col gap-3">
+          <div className="lg:col-span-2 flex flex-col gap-5">
             {templates.map((tmpl) => (
               <button
                 key={tmpl.id}
                 onClick={() => setActive(tmpl.id)}
                 className={cn(
-                  "w-full text-left p-5 rounded-2xl border transition-all duration-300 group",
+                  "w-full text-left p-7 rounded-3xl border transition-all duration-300 group",
                   active === tmpl.id
                     ? "border-[var(--accent)] bg-[var(--surface-2)] shadow-[0_0_24px_rgba(124,106,255,0.1)]"
                     : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border)]/80 hover:bg-[var(--surface-2)]",
                 )}
               >
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <div className="flex items-center gap-3">
-                    {/* Color swatch */}
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div className="flex items-center gap-4">
                     <div
-                      className="w-8 h-8 rounded-lg flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
+                      className="w-12 h-12 rounded-xl flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
                       style={{ background: tmpl.accent }}
                     />
                     <div>
-                      <div className="font-semibold text-sm">{tmpl.name}</div>
+                      <div className="font-semibold text-xl">{tmpl.name}</div>
                       <Badge
                         variant={
                           tmpl.tag === "Most Popular"
@@ -402,7 +400,7 @@ export default function TemplateShowcase() {
                               : "success"
                         }
                         size="xs"
-                        className="mt-0.5"
+                        className="mt-1"
                       >
                         {tmpl.tag}
                       </Badge>
@@ -410,31 +408,33 @@ export default function TemplateShowcase() {
                   </div>
                   {active === tmpl.id && (
                     <div
-                      className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                      className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
                       style={{ background: tmpl.accent }}
                     >
-                      <Check size={11} className="text-black" />
+                      <Check size={15} className="text-black" />
                     </div>
                   )}
                 </div>
-                <p className="text-[var(--text-muted)] text-xs leading-relaxed mb-3">
+
+                <p className="text-[var(--text-muted)] text-base md:text-lg leading-relaxed mb-4">
                   {tmpl.desc}
                 </p>
+
                 {active === tmpl.id && (
-                  <div className="space-y-1">
+                  <div className="space-y-2">
                     {tmpl.features.map((f) => (
                       <div
                         key={f}
-                        className="flex items-center gap-2 text-xs text-[var(--text-muted)]"
+                        className="flex items-center gap-3 text-sm md:text-base text-[var(--text-muted)]"
                       >
                         <div
-                          className="w-1 h-1 rounded-full flex-shrink-0"
+                          className="w-2 h-2 rounded-full flex-shrink-0"
                           style={{ background: tmpl.accent }}
                         />
                         {f}
                       </div>
                     ))}
-                    <div className="pt-2 text-xs text-[var(--text-muted)]">
+                    <div className="pt-3 text-sm md:text-base text-[var(--text-muted)]">
                       Best for{" "}
                       <span
                         className="font-medium"
@@ -450,48 +450,50 @@ export default function TemplateShowcase() {
 
             <Link
               href="/builder"
-              className="mt-2 flex items-center justify-center gap-2 py-3 px-6 rounded-2xl text-sm font-semibold text-black transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(124,106,255,0.3)]"
+              className="mt-3 flex items-center justify-center gap-3 py-5 px-8 rounded-3xl text-lg md:text-xl font-semibold text-black transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(124,106,255,0.3)]"
               style={{
                 background:
                   "linear-gradient(135deg, var(--accent), var(--accent-2))",
               }}
             >
               Use {activeTemplate.name} Template
-              <ArrowRight size={15} />
+              <ArrowRight size={20} />
             </Link>
           </div>
 
           {/* Right: live browser frame preview */}
           <div className="lg:col-span-3 flex flex-col">
             {/* Browser chrome */}
-            <div className="rounded-t-2xl border border-[var(--border)] border-b-0 bg-[var(--surface)] px-4 py-3 flex items-center gap-3">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-500/50" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
-                <div className="w-3 h-3 rounded-full bg-green-500/50" />
+            <div className="rounded-t-3xl border border-[var(--border)] border-b-0 bg-[var(--surface)] px-6 py-4 flex items-center gap-4">
+              <div className="flex gap-2">
+                <div className="w-4 h-4 rounded-full bg-red-500/50" />
+                <div className="w-4 h-4 rounded-full bg-yellow-500/50" />
+                <div className="w-4 h-4 rounded-full bg-green-500/50" />
               </div>
+
               <div
-                className="flex-1 h-6 rounded-md border border-[var(--border)] bg-[var(--bg)] flex items-center justify-center text-[10px] font-mono text-[var(--text-muted)]"
-                style={{ maxWidth: 220, margin: "0 auto" }}
+                className="flex-1 h-8 rounded-md border border-[var(--border)] bg-[var(--bg)] flex items-center justify-center text-xs font-mono text-[var(--text-muted)]"
+                style={{ maxWidth: 280, margin: "0 auto" }}
               >
                 folio.app/alexrivera
               </div>
-              <div className="flex items-center gap-1 bg-[var(--bg)] rounded-lg p-1">
+
+              <div className="flex items-center gap-2 bg-[var(--bg)] rounded-xl p-1.5">
                 {(["desktop", "mobile"] as const).map((d) => (
                   <button
                     key={d}
                     onClick={() => setDevice(d)}
                     className={cn(
-                      "p-1 rounded-md transition-all",
+                      "p-2 rounded-lg transition-all",
                       device === d
                         ? "bg-[var(--surface-2)] text-[var(--text)]"
                         : "text-[var(--text-muted)] hover:text-[var(--text)]",
                     )}
                   >
                     {d === "desktop" ? (
-                      <Monitor size={12} />
+                      <Monitor size={16} />
                     ) : (
-                      <Smartphone size={12} />
+                      <Smartphone size={16} />
                     )}
                   </button>
                 ))}
@@ -500,14 +502,14 @@ export default function TemplateShowcase() {
 
             {/* Preview frame */}
             <div
-              className="border border-[var(--border)] rounded-b-2xl overflow-hidden transition-all duration-500"
-              style={{ minHeight: 380 }}
+              className="border border-[var(--border)] rounded-b-3xl overflow-hidden transition-all duration-500"
+              style={{ minHeight: 500 }}
             >
               <div
                 className={cn(
                   "transition-all duration-500 overflow-hidden",
                   device === "mobile"
-                    ? "max-w-[300px] mx-auto border-x border-[var(--border)]"
+                    ? "max-w-[340px] mx-auto border-x border-[var(--border)]"
                     : "w-full",
                 )}
               >
@@ -516,17 +518,17 @@ export default function TemplateShowcase() {
             </div>
 
             {/* Caption */}
-            <div className="mt-4 flex items-center justify-between px-1">
-              <div className="flex items-center gap-2">
+            <div className="mt-5 flex items-center justify-between px-1">
+              <div className="flex items-center gap-3">
                 <div
-                  className="w-2.5 h-2.5 rounded-full animate-pulse"
+                  className="w-3 h-3 rounded-full animate-pulse"
                   style={{ background: activeTemplate.accent }}
                 />
-                <span className="text-xs text-[var(--text-muted)]">
+                <span className="text-sm md:text-base text-[var(--text-muted)]">
                   Live preview — updates as you type
                 </span>
               </div>
-              <span className="text-xs text-[var(--text-muted)]">
+              <span className="text-sm md:text-base text-[var(--text-muted)]">
                 Switch without losing data
               </span>
             </div>

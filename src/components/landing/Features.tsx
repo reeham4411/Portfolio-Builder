@@ -40,36 +40,40 @@ export default function Features() {
     <section className="py-32 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-20">
-          <h2 className="font-display text-5xl md:text-6xl font-bold mb-4">
+          <h2 className="font-display text-10xl md:text-8xl font-bold mb-4">
             Everything you need,
             <br />
             <span className="gradient-text">nothing you don&apos;t.</span>
           </h2>
-          <p className="text-(--text-muted) text-lg max-w-xl mx-auto">
+          <p className="text-(--text-muted) text-xl max-w-xl mx-auto">
             Thoughtfully built for designers, developers, writers, and everyone
             in between.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map(({ icon: Icon, title, desc }) => (
             <div
               key={title}
-              className="group p-8 rounded-2xl border border-(--border) bg-(--surface) hover:border-(--accent) hover:bg-(--surface-2) transition-all duration-300 cursor-default"
+              className="group p-10 rounded-3xl border border-(--border) bg-(--surface) hover:border-(--accent) hover:bg-(--surface-2) transition-all duration-300 cursor-default"
             >
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
+                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110"
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(124,106,255,0.2), rgba(255,107,157,0.2))",
                 }}
               >
-                <Icon size={22} className="text-(--accent)" />
+                <Icon size={28} className="text-(--accent)" />
               </div>
-              <h3 className="font-display text-xl font-semibold mb-2">
+
+              <h3 className="font-display text-2xl font-semibold mb-3">
                 {title}
               </h3>
-              <p className="text-(--text-muted) leading-relaxed">{desc}</p>
+
+              <p className="text-lg text-(--text-muted) leading-relaxed">
+                {desc}
+              </p>
             </div>
           ))}
         </div>

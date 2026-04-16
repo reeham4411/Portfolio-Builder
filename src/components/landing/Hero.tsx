@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Sparkles, Globe } from "lucide-react";
+import { ArrowRight, Globe } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -22,26 +22,22 @@ export default function Hero() {
 
       {/* Nav */}
       <nav className="absolute top-0 left-0 right-0 flex items-center justify-between px-8 py-6 z-10">
-        <span className="font-display text-2xl font-bold tracking-tight">
+        <span className="font-display text-6xl font-bold tracking-tight">
           <span className="gradient-text">folio</span>
           <span className="text-(--text-muted)">.</span>
         </span>
+
         <Link
           href="/builder"
-          className="flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full border border-(--border) hover:border-(--accent) hover:text-(--accent)transition-all duration-300"
+          className="flex items-center gap-2 text-xl font-semibold px-10 py-5 rounded-full border border-(--border) hover:border-(--accent) hover:text-(--accent) transition-all duration-300"
         >
-          Start Building <ArrowRight size={14} />
+          Start Building <ArrowRight size={18} />
         </Link>
       </nav>
 
       {/* Hero content */}
       <div className="relative z-10 text-center max-w-5xl mx-auto px-6">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-(--border) text-(--text-muted) text-sm mb-8 opacity-0 animate-fade-up">
-          <Sparkles size={13} className="text-(--accent)" />
-          AI-powered portfolio generation
-        </div>
-
-        <h1 className="font-display text-6xl md:text-8xl font-black leading-[0.9] tracking-tight mb-8 opacity-0 animate-fade-up animate-delay-100">
+        <h1 className="font-display text-9xl md:text-15xl font-black leading-[0.9] tracking-tight mb-8 opacity-0 animate-fade-up animate-delay-100">
           Your work,
           <br />
           <span className="gradient-text">beautifully</span>
@@ -57,7 +53,7 @@ export default function Hero() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0 animate-fade-up animate-delay-300">
           <Link
             href="/builder"
-            className="group flex items-center gap-3 px-8 py-4 rounded-full text-black font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(124,106,255,0.4)]"
+            className="group flex items-center gap-3 px-10 py-6 rounded-full text-black font-semibold text-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(124,106,255,0.4)]"
             style={{
               background:
                 "linear-gradient(135deg, var(--accent), var(--accent-2))",
@@ -71,15 +67,15 @@ export default function Hero() {
           </Link>
           <Link
             href="/preview/demo"
-            className="flex items-center gap-2 px-8 py-4 rounded-full border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--text)] transition-all duration-300"
+            className="flex items-center gap-2 px-10 py-6 rounded-full border border-(--border) text-xl font-semibold text-(--text-muted) hover:text-var(--text) hover:border-(--text) transition-all duration-300"
           >
-            <Globe size={16} />
+            <Globe size={18} />
             See Example
           </Link>
         </div>
 
         {/* Stats */}
-        <div
+        {/* <div
           className="mt-24 grid grid-cols-3 gap-8 max-w-lg mx-auto opacity-0 animate-fade-up"
           style={{ animationDelay: "0.5s" }}
         >
@@ -92,12 +88,10 @@ export default function Hero() {
               <div className="font-display text-3xl font-bold gradient-text">
                 {num}
               </div>
-              <div className="text-(--text-muted)s text-sm mt-1">
-                {label}
-              </div>
+              <div className="text-(--text-muted)s text-sm mt-1">{label}</div>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );

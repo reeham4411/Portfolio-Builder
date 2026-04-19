@@ -17,7 +17,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       <input
         ref={ref}
         className={cn(
-          "w-full px-4 py-2.5 rounded-xl border border-(--border) bg-(--surface) text-(--text) placeholder-(--text-muted) focus:outline-none focus:border-(--accent)focus:ring-1 focus:ring-(--accent)transition-all text-sm",
+          "w-full px-4 py-2.5 rounded-xl border border-(--border) bg-(--surface) text-(--text) placeholder-(--text-muted) focus:outline-none focus:border-(--accent) focus:ring-1 focus:ring-(--accent) transition-all text-sm",
           error && "border-red-500/50",
           className,
         )}
@@ -44,7 +44,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       <textarea
         ref={ref}
         className={cn(
-          "w-full px-4 py-2.5 rounded-xl border border-(--border) bg-(--surface) text-(--text) placeholder-(--text-muted) focus:outline-none focus:border-(--accent) focus:ring-1 focus:ring-(--accent)transition-all text-sm resize-none",
+          "w-full px-4 py-2.5 rounded-xl border border-(--border) bg-(--surface) text-(--text) placeholder-(--text-muted) focus:outline-none focus:border-(--accent) focus:ring-1 focus:ring-(--accent) transition-all text-sm resize-none",
           className,
         )}
         {...props}

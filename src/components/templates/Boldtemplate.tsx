@@ -1,19 +1,15 @@
 import { PortfolioData } from "@/types/portfolio";
-import {
-  Mail,
-  MapPin,
-  ArrowUpRight,
-} from "lucide-react";
+import { Mail, MapPin, ArrowUpRight } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function BoldTemplate({ data }: { data: PortfolioData }) {
   const { personalInfo: p, skills, projects, experience } = data;
+
   return (
     <div
       className="min-h-screen text-white"
       style={{ background: "#0a0a0a", fontFamily: "'DM Sans', sans-serif" }}
     >
-      {/* Hero */}
       <div
         className="relative overflow-hidden"
         style={{ background: "linear-gradient(135deg, #ff6b9d22, #7c6aff22)" }}
@@ -29,12 +25,15 @@ export default function BoldTemplate({ data }: { data: PortfolioData }) {
           >
             {p.title || "Your Title"}
           </div>
+
           <h1 className="text-7xl font-black tracking-tight mb-6 leading-none">
             {p.name || "Your Name"}
           </h1>
+
           <p className="text-gray-400 text-xl max-w-xl leading-relaxed mb-8">
             {p.bio}
           </p>
+
           <div className="flex flex-wrap gap-4 text-sm">
             {p.email && (
               <a
@@ -45,24 +44,31 @@ export default function BoldTemplate({ data }: { data: PortfolioData }) {
                 {p.email}
               </a>
             )}
+
             {p.location && (
               <span className="flex items-center gap-2 text-gray-500">
                 <MapPin size={14} />
                 {p.location}
               </span>
             )}
+
             {p.github && (
               <a
                 href={p.github}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors"
               >
                 <FaGithub size={14} />
                 GitHub
               </a>
             )}
+
             {p.linkedin && (
               <a
                 href={p.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors"
               >
                 <FaLinkedin size={14} />
@@ -79,6 +85,7 @@ export default function BoldTemplate({ data }: { data: PortfolioData }) {
             <h2 className="text-4xl font-black mb-8">
               Skills<span style={{ color: "#ff6b9d" }}>.</span>
             </h2>
+
             <div className="flex flex-wrap gap-3">
               {skills.map((s) => (
                 <div
@@ -101,6 +108,7 @@ export default function BoldTemplate({ data }: { data: PortfolioData }) {
             <h2 className="text-4xl font-black mb-8">
               Projects<span style={{ color: "#ff6b9d" }}>.</span>
             </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {projects.map((pr) => (
                 <div
@@ -110,18 +118,39 @@ export default function BoldTemplate({ data }: { data: PortfolioData }) {
                 >
                   <div className="flex items-start justify-between mb-4">
                     <h3 className="font-bold text-xl">{pr.title}</h3>
-                    {pr.liveUrl && (
-                      <a
-                        href={pr.liveUrl}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <ArrowUpRight size={18} style={{ color: "#ff6b9d" }} />
-                      </a>
-                    )}
+
+                    <div className="flex items-center gap-3">
+                      {pr.githubUrl && (
+                        <a
+                          href={pr.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="opacity-70 hover:opacity-100 transition-opacity"
+                        >
+                          <FaGithub size={17} style={{ color: "#9ca3af" }} />
+                        </a>
+                      )}
+
+                      {pr.liveUrl && (
+                        <a
+                          href={pr.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="opacity-70 hover:opacity-100 transition-opacity"
+                        >
+                          <ArrowUpRight
+                            size={18}
+                            style={{ color: "#ff6b9d" }}
+                          />
+                        </a>
+                      )}
+                    </div>
                   </div>
+
                   <p className="text-gray-400 text-sm leading-relaxed mb-4">
                     {pr.description}
                   </p>
+
                   <div className="flex flex-wrap gap-2">
                     {pr.techStack.map((t) => (
                       <span
@@ -144,6 +173,7 @@ export default function BoldTemplate({ data }: { data: PortfolioData }) {
             <h2 className="text-4xl font-black mb-8">
               Experience<span style={{ color: "#ff6b9d" }}>.</span>
             </h2>
+
             {experience.map((ex) => (
               <div key={ex.id} className="flex gap-8 mb-10 group">
                 <div className="shrink-0 text-right text-sm text-gray-600 pt-1 w-28">
@@ -151,14 +181,17 @@ export default function BoldTemplate({ data }: { data: PortfolioData }) {
                   <div>—</div>
                   <div>{ex.current ? "Now" : ex.endDate}</div>
                 </div>
+
                 <div
                   className="flex-1 pb-10"
                   style={{ borderLeft: "1px solid #222", paddingLeft: "2rem" }}
                 >
                   <h3 className="font-bold text-lg">{ex.role}</h3>
+
                   <p style={{ color: "#ff6b9d" }} className="text-sm mb-2">
                     {ex.company}
                   </p>
+
                   <p className="text-gray-400 text-sm leading-relaxed">
                     {ex.description}
                   </p>

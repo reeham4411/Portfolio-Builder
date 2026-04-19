@@ -4,7 +4,7 @@ import { usePortfolio } from "@/context/PortfolioContext";
 import { Input, Textarea } from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { Plus, Trash2, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { generateId } from "@/lib/utils";
 import { Project } from "@/types/portfolio";
 import { generateAIContent } from "@/lib/ai";
@@ -23,11 +23,21 @@ export default function ProjectsForm() {
   const { data, updateProjects, setCurrentStep } = usePortfolio();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState<string | null>(null);
+  const [techInputs, setTechInputs] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const next: Record<string, string> = {};
+    for (const project of data.projects) {
+      next[project.id] = project.techStack.join(", ");
+    }
+    setTechInputs(next);
+  }, [data.projects]);
 
   const addProject = () => {
     const p = emptyProject();
     updateProjects([...data.projects, p]);
     setExpanded(p.id);
+    setTechInputs((prev) => ({ ...prev, [p.id]: "" }));
   };
 
   const updateProject = (id: string, updates: Partial<Project>) =>
@@ -35,22 +45,54 @@ export default function ProjectsForm() {
       data.projects.map((p) => (p.id === id ? { ...p, ...updates } : p)),
     );
 
-  const removeProject = (id: string) =>
+  const removeProject = (id: string) => {
     updateProjects(data.projects.filter((p) => p.id !== id));
+    setTechInputs((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    if (expanded === id) {
+      setExpanded(null);
+    }
+  };
 
   const handleAIDesc = async (project: Project) => {
     if (!project.title) return;
     setAiLoading(project.id);
+
     try {
       const result = await generateAIContent(
-        `Write a compelling 2-3 sentence project description for a portfolio for a project called "${project.title}"${project.techStack.length ? ` built with ${project.techStack.join(", ")}` : ""}. Make it engaging and professional.`,
+        `Write a compelling 2-3 sentence project description for a portfolio for a project called "${project.title}"${
+          project.techStack.length
+            ? ` built with ${project.techStack.join(", ")}`
+            : ""
+        }. Make it engaging and professional.`,
       );
+
       updateProject(project.id, { description: result });
     } catch {
       console.error("Failed");
     } finally {
       setAiLoading(null);
     }
+  };
+
+  const handleTechInputChange = (projectId: string, value: string) => {
+    setTechInputs((prev) => ({
+      ...prev,
+      [projectId]: value,
+    }));
+  };
+
+  const commitTechStack = (projectId: string) => {
+    const raw = techInputs[projectId] ?? "";
+    updateProject(projectId, {
+      techStack: raw
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean),
+    });
   };
 
   return (
@@ -67,6 +109,7 @@ export default function ProjectsForm() {
             className="rounded-xl border border-(--border) bg-(--surface) overflow-hidden"
           >
             <button
+              type="button"
               className="w-full flex items-center justify-between p-4 hover:bg-(--surface-2) transition-colors"
               onClick={() =>
                 setExpanded(expanded === project.id ? null : project.id)
@@ -75,8 +118,10 @@ export default function ProjectsForm() {
               <span className="font-medium">
                 {project.title || "Untitled Project"}
               </span>
+
               <div className="flex items-center gap-2">
                 <button
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     removeProject(project.id);
@@ -85,6 +130,7 @@ export default function ProjectsForm() {
                 >
                   <Trash2 size={14} />
                 </button>
+
                 {expanded === project.id ? (
                   <ChevronUp size={16} className="text-(--text-muted)" />
                 ) : (
@@ -105,11 +151,13 @@ export default function ProjectsForm() {
                     }
                   />
                 </div>
+
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-medium text-(--text-muted)">
                       Description
                     </label>
+
                     <Button
                       variant="ghost"
                       size="sm"
@@ -120,6 +168,7 @@ export default function ProjectsForm() {
                       <Sparkles size={12} /> AI Write
                     </Button>
                   </div>
+
                   <Textarea
                     placeholder="What does this project do?"
                     rows={3}
@@ -129,19 +178,17 @@ export default function ProjectsForm() {
                     }
                   />
                 </div>
+
                 <Input
                   label="Tech Stack (comma separated)"
                   placeholder="React, Node.js, PostgreSQL"
-                  value={project.techStack.join(", ")}
+                  value={techInputs[project.id] ?? ""}
                   onChange={(e) =>
-                    updateProject(project.id, {
-                      techStack: e.target.value
-                        .split(",")
-                        .map((item) => item.trim())
-                        .filter(Boolean),
-                    })
+                    handleTechInputChange(project.id, e.target.value)
                   }
+                  onBlur={() => commitTechStack(project.id)}
                 />
+
                 <div className="grid grid-cols-2 gap-3">
                   <Input
                     label="Live URL"
@@ -151,6 +198,7 @@ export default function ProjectsForm() {
                       updateProject(project.id, { liveUrl: e.target.value })
                     }
                   />
+
                   <Input
                     label="GitHub URL"
                     placeholder="https://github.com/..."

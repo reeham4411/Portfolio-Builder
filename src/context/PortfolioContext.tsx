@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   PortfolioData,
   TemplateId,
@@ -17,6 +18,7 @@ type PortfolioContextType = {
   publishedId: string | null;
   isPublishing: boolean;
   error: string | null;
+  isLoadingPortfolio: boolean;
 
   setCurrentStep: (step: BuilderStep) => void;
 
@@ -55,6 +57,9 @@ const STEP_KEY = "portfolio_builder_step";
 const PORTFOLIO_ID_KEY = "portfolio_builder_portfolio_id";
 
 export function PortfolioProvider({ children }: { children: React.ReactNode }) {
+  const searchParams = useSearchParams();
+  const builderId = searchParams.get("id");
+
   const [data, setData] = useState<PortfolioData>(initialData);
   const [currentStep, setCurrentStep] = useState<BuilderStep>("template");
 
@@ -62,9 +67,12 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
   const [portfolioId, setPortfolioId] = useState<string | null>(null);
   const [isPublishing, setIsPublishing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoadingPortfolio, setIsLoadingPortfolio] = useState(false);
 
+  // local restore only when NOT editing an existing saved portfolio
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (builderId) return;
 
     const savedDraft = localStorage.getItem(STORAGE_KEY);
     const savedStep = localStorage.getItem(STEP_KEY);
@@ -85,27 +93,96 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     if (savedPortfolioId) {
       setPortfolioId(savedPortfolioId);
     }
-  }, []);
+  }, [builderId]);
 
+  // load saved portfolio when editing
+  useEffect(() => {
+    if (!builderId) return;
+
+    const loadPortfolio = async () => {
+      try {
+        setIsLoadingPortfolio(true);
+        setError(null);
+
+        const res = await fetch(`/api/portfolio/${builderId}`, {
+          method: "GET",
+          cache: "no-store",
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+          throw new Error(result.error || "Failed to load portfolio");
+        }
+
+        const portfolio = result.portfolio;
+
+        setPortfolioId(portfolio.id);
+        setPublishedId(portfolio.slug ?? null);
+
+        setData({
+          templateId: portfolio.template_id ?? "minimalist",
+          personalInfo: {
+            name: portfolio.content_json?.personalInfo?.name ?? "",
+            title: portfolio.content_json?.personalInfo?.title ?? "",
+            email: portfolio.content_json?.personalInfo?.email ?? "",
+            phone: portfolio.content_json?.personalInfo?.phone ?? "",
+            location: portfolio.content_json?.personalInfo?.location ?? "",
+            website: portfolio.content_json?.personalInfo?.website ?? "",
+            linkedin: portfolio.content_json?.personalInfo?.linkedin ?? "",
+            github: portfolio.content_json?.personalInfo?.github ?? "",
+            bio: portfolio.content_json?.personalInfo?.bio ?? "",
+            avatar: portfolio.content_json?.personalInfo?.avatar ?? "",
+          },
+          skills: Array.isArray(portfolio.content_json?.skills)
+            ? portfolio.content_json.skills
+            : [],
+          projects: Array.isArray(portfolio.content_json?.projects)
+            ? portfolio.content_json.projects
+            : [],
+          experience: Array.isArray(portfolio.content_json?.experience)
+            ? portfolio.content_json.experience
+            : [],
+        });
+
+        setCurrentStep("template");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Failed to load portfolio");
+        }
+      } finally {
+        setIsLoadingPortfolio(false);
+      }
+    };
+
+    loadPortfolio();
+  }, [builderId]);
+
+  // local autosave only for new/unsaved flow, not edit mode
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (builderId) return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }, [data]);
+  }, [data, builderId]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (builderId) return;
     localStorage.setItem(STEP_KEY, currentStep);
-  }, [currentStep]);
+  }, [currentStep, builderId]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (builderId) return;
 
     if (portfolioId) {
       localStorage.setItem(PORTFOLIO_ID_KEY, portfolioId);
     } else {
       localStorage.removeItem(PORTFOLIO_ID_KEY);
     }
-  }, [portfolioId]);
+  }, [portfolioId, builderId]);
 
   const updateTemplate = (id: TemplateId) => {
     setData((prev) => ({
@@ -223,6 +300,7 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
         publishedId,
         isPublishing,
         error,
+        isLoadingPortfolio,
 
         setCurrentStep,
 

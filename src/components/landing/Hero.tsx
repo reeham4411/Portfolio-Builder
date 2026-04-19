@@ -71,7 +71,23 @@ export default function Hero() {
               >
                 Sign Up
               </Link>
+
+              <button
+                disabled
+                className="flex items-center gap-2 text-lg font-semibold px-6 py-3 rounded-full border border-(--border) opacity-50 cursor-not-allowed"
+              >
+                Saved Portfolios
+              </button>
             </>
+          )}
+
+          {isLoggedIn && (
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2 text-lg font-semibold px-6 py-3 rounded-full border border-(--border) hover:border-(--accent) hover:text-(--accent) transition-all duration-300"
+            >
+              Saved Portfolios
+            </Link>
           )}
 
           {isLoggedIn ? (

@@ -13,32 +13,29 @@ export default function BuilderLayout() {
         className="h-screen flex flex-col overflow-hidden"
         style={{ background: "var(--bg)" }}
       >
-        {/* Top bar */}
-        <header className="flex items-center justify-between px-8 py-4 border-b border-(--border) bg-(--surface) shrink-0 z-10">
+        <header className="flex items-center justify-between px-5 md:px-8 py-3 md:py-4 border-b border-(--border) bg-(--surface) shrink-0 z-10 gap-4">
           <Link
             href="/"
-            className="font-display text-6xl font-bold tracking-tight"
+            className="font-display text-4xl md:text-5xl font-bold tracking-tight shrink-0"
           >
             <span className="gradient-text">folio</span>
             <span className="text-(--text-muted)">.</span>
           </Link>
 
-          <div className="flex-1 mx-10 overflow-x-auto">
+          <div className="flex-1 mx-4 md:mx-10 overflow-x-auto">
             <StepNav />
           </div>
 
-          <div className="text-lg font-medium text-(--text-muted) shrink-0">
+          <div className="text-sm md:text-base font-medium text-(--text-muted) shrink-0">
             Auto-saved
           </div>
         </header>
-        {/* Main 2-column layout */}
+
         <div className="flex flex-1 overflow-hidden">
-          {/* Sidebar */}
-          <div className="w-105 shrink-0 border-r border-(--border) bg-(--surface) overflow-hidden">
+          <div className="w-85 md:w-95 shrink-0 border-r border-(--border) bg-(--surface) overflow-hidden">
             <Sidebar />
           </div>
 
-          {/* Preview */}
           <div className="flex-1 overflow-hidden">
             <PreviewPane />
           </div>

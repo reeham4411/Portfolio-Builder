@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { HTMLAttributes, forwardRef } from "react";
 
-// ─── Root Card ───────────────────────────────────────────────────────────────
+// ─── Root Card
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "elevated" | "outline" | "ghost" | "accent";
@@ -19,20 +19,16 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
-    const base =
-      "rounded-2xl transition-all duration-300";
+    const base = "rounded-2xl transition-all duration-300";
 
     const variants = {
-      default:
-        "bg-[var(--surface)] border border-[var(--border)]",
+      default: "bg-[var(--surface)] border border-[var(--border)]",
       elevated:
         "bg-[var(--surface)] border border-[var(--border)] shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
-      outline:
-        "bg-transparent border border-[var(--border)]",
-      ghost:
-        "bg-transparent border border-transparent",
+      outline: "bg-transparent border border-[var(--border)]",
+      ghost: "bg-transparent border border-transparent",
       accent:
         "bg-[var(--surface)] border border-[var(--accent)]/30 shadow-[0_0_24px_rgba(124,106,255,0.08)]",
     };
@@ -51,17 +47,23 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     return (
       <div
         ref={ref}
-        className={cn(base, variants[variant], paddings[padding], hoverStyles, className)}
+        className={cn(
+          base,
+          variants[variant],
+          paddings[padding],
+          hoverStyles,
+          className,
+        )}
         {...props}
       >
         {children}
       </div>
     );
-  }
+  },
 );
 Card.displayName = "Card";
 
-// ─── Card Header ─────────────────────────────────────────────────────────────
+// ─── Card Header
 
 interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
   border?: boolean;
@@ -74,58 +76,66 @@ const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
       className={cn(
         "flex flex-col gap-1",
         border && "pb-4 mb-4 border-b border-[var(--border)]",
-        className
+        className,
       )}
       {...props}
     >
       {children}
     </div>
-  )
+  ),
 );
 CardHeader.displayName = "CardHeader";
 
-// ─── Card Title ───────────────────────────────────────────────────────────────
+// ─── Card Title
 
-const CardTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, children, ...props }, ref) => (
-    <h3
-      ref={ref}
-      className={cn("font-display text-lg font-semibold leading-tight", className)}
-      {...props}
-    >
-      {children}
-    </h3>
-  )
-);
+const CardTitle = forwardRef<
+  HTMLHeadingElement,
+  HTMLAttributes<HTMLHeadingElement>
+>(({ className, children, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "font-display text-lg font-semibold leading-tight",
+      className,
+    )}
+    {...props}
+  >
+    {children}
+  </h3>
+));
 CardTitle.displayName = "CardTitle";
 
-// ─── Card Description ────────────────────────────────────────────────────────
+// ─── Card Description
 
-const CardDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
-  ({ className, children, ...props }, ref) => (
-    <p
-      ref={ref}
-      className={cn("text-sm text-[var(--text-muted)] leading-relaxed", className)}
-      {...props}
-    >
-      {children}
-    </p>
-  )
-);
+const CardDescription = forwardRef<
+  HTMLParagraphElement,
+  HTMLAttributes<HTMLParagraphElement>
+>(({ className, children, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn(
+      "text-sm text-[var(--text-muted)] leading-relaxed",
+      className,
+    )}
+    {...props}
+  >
+    {children}
+  </p>
+));
 CardDescription.displayName = "CardDescription";
 
-// ─── Card Content ────────────────────────────────────────────────────────────
+// ─── Card Content
 
 const CardContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => (
     <div ref={ref} className={cn("", className)} {...props}>
       {children}
     </div>
-  )
+  ),
 );
 CardContent.displayName = "CardContent";
 
-// ─── Card Footer ─────────────────────────────────────────────────────────────
+// ─── Card Footer
 
 interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
   border?: boolean;
@@ -138,17 +148,17 @@ const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
       className={cn(
         "flex items-center",
         border && "pt-4 mt-4 border-t border-[var(--border)]",
-        className
+        className,
       )}
       {...props}
     >
       {children}
     </div>
-  )
+  ),
 );
 CardFooter.displayName = "CardFooter";
 
-// ─── Stat Card ────────────────────────────────────────────────────────────────
+// ─── Stat Card
 // A ready-made metric card for numbers/stats
 
 interface StatCardProps {
@@ -177,7 +187,11 @@ function StatCard({
   };
 
   return (
-    <Card variant="default" padding="md" className={cn("flex flex-col gap-2", className)}>
+    <Card
+      variant="default"
+      padding="md"
+      className={cn("flex flex-col gap-2", className)}
+    >
       <div className="flex items-start justify-between">
         <span className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wide">
           {label}
@@ -187,7 +201,9 @@ function StatCard({
         )}
       </div>
       <div className="flex items-end gap-2">
-        <span className="font-display text-3xl font-bold gradient-text">{value}</span>
+        <span className="font-display text-3xl font-bold gradient-text">
+          {value}
+        </span>
         {trendValue && trend && (
           <span className={cn("text-xs font-medium mb-1", trendColors[trend])}>
             {trend === "up" ? "↑" : trend === "down" ? "↓" : "→"} {trendValue}

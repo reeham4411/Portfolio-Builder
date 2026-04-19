@@ -29,31 +29,30 @@ export default function StepNav() {
   const currentIndex = order.indexOf(currentStep);
 
   return (
-    <div className="flex items-center gap-1 overflow-x-auto pb-1">
+    <div className="flex items-center gap-3 overflow-x-auto pb-2">
       {steps.map(({ id, label, icon: Icon }, i) => {
         const done = i < currentIndex;
         const active = id === currentStep;
+
         return (
           <button
             key={id}
             onClick={() => setCurrentStep(id)}
             className={cn(
-              "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap",
+              "flex items-center gap-3 px-5 py-3 rounded-xl text-base font-semibold transition-all whitespace-nowrap",
               active &&
                 "bg-(--accent)/10 text-(--accent) border border-(--accent)/30",
-              done &&
-                !active &&
-                "text-(--text-muted) hover:text-(--text)",
+              done && !active && "text-(--text-muted) hover:text-(--text)",
               !done && !active && "text-(--text-muted)/40 cursor-default",
             )}
             disabled={!done && !active && i > currentIndex}
           >
             {done ? (
-              <span className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                <Check size={11} className="text-emerald-400" />
+              <span className="w-7 h-7 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                <Check size={15} className="text-emerald-400" />
               </span>
             ) : (
-              <Icon size={15} />
+              <Icon size={18} />
             )}
             {label}
           </button>

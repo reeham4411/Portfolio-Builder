@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState } from "react";
 import {
   PortfolioData,
   TemplateId,
@@ -8,9 +8,30 @@ import {
   Skill,
   Project,
   Experience,
+  PersonalInfo,
 } from "@/types/portfolio";
 
-const defaultData: PortfolioData = {
+type PortfolioContextType = {
+  data: PortfolioData;
+  currentStep: BuilderStep;
+  publishedId: string | null;
+  isPublishing: boolean;
+  error: string | null;
+
+  setCurrentStep: (step: BuilderStep) => void;
+
+  updateTemplate: (id: TemplateId) => void;
+  updatePersonalInfo: (info: Partial<PersonalInfo>) => void;
+  updateSkills: (skills: Skill[]) => void;
+  updateProjects: (projects: Project[]) => void;
+  updateExperience: (experience: Experience[]) => void;
+
+  publishPortfolio: () => Promise<void>;
+};
+
+const PortfolioContext = createContext<PortfolioContextType | null>(null);
+
+const initialData: PortfolioData = {
   templateId: "minimalist",
   personalInfo: {
     name: "",
@@ -29,43 +50,85 @@ const defaultData: PortfolioData = {
   experience: [],
 };
 
-interface PortfolioContextType {
-  data: PortfolioData;
-  currentStep: BuilderStep;
-  setCurrentStep: (step: BuilderStep) => void;
-  updateTemplate: (id: TemplateId) => void;
-  updatePersonalInfo: (info: Partial<PortfolioData["personalInfo"]>) => void;
-  updateSkills: (skills: Skill[]) => void;
-  updateProjects: (projects: Project[]) => void;
-  updateExperience: (experience: Experience[]) => void;
-  publishedId: string | null;
-  publishPortfolio: () => string;
-}
-
-const PortfolioContext = createContext<PortfolioContextType | null>(null);
-
-export function PortfolioProvider({ children }: { children: ReactNode }) {
-  const [data, setData] = useState<PortfolioData>(defaultData);
+export function PortfolioProvider({ children }: { children: React.ReactNode }) {
+  const [data, setData] = useState<PortfolioData>(initialData);
   const [currentStep, setCurrentStep] = useState<BuilderStep>("template");
+
   const [publishedId, setPublishedId] = useState<string | null>(null);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const updateTemplate = (id: TemplateId) =>
-    setData((d) => ({ ...d, templateId: id }));
-  const updatePersonalInfo = (info: Partial<PortfolioData["personalInfo"]>) =>
-    setData((d) => ({ ...d, personalInfo: { ...d.personalInfo, ...info } }));
-  const updateSkills = (skills: Skill[]) => setData((d) => ({ ...d, skills }));
-  const updateProjects = (projects: Project[]) =>
-    setData((d) => ({ ...d, projects }));
-  const updateExperience = (experience: Experience[]) =>
-    setData((d) => ({ ...d, experience }));
+  const updateTemplate = (id: TemplateId) => {
+    setData((prev) => ({
+      ...prev,
+      templateId: id,
+    }));
+  };
 
-  const publishPortfolio = () => {
-    const id = Math.random().toString(36).substring(2, 10);
-    if (typeof window !== "undefined") {
-      localStorage.setItem(`portfolio_${id}`, JSON.stringify(data));
+  const updatePersonalInfo = (info: Partial<PersonalInfo>) => {
+    setData((prev) => ({
+      ...prev,
+      personalInfo: {
+        ...prev.personalInfo,
+        ...info,
+      },
+    }));
+  };
+
+  const updateSkills = (skills: Skill[]) => {
+    setData((prev) => ({
+      ...prev,
+      skills,
+    }));
+  };
+
+  const updateProjects = (projects: Project[]) => {
+    setData((prev) => ({
+      ...prev,
+      projects,
+    }));
+  };
+
+  const updateExperience = (experience: Experience[]) => {
+    setData((prev) => ({
+      ...prev,
+      experience,
+    }));
+  };
+
+  const publishPortfolio = async () => {
+    try {
+      setIsPublishing(true);
+      setError(null);
+
+      const res = await fetch("/api/portfolio/publish", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: data,
+          templateId: data.templateId,
+          fullName: data.personalInfo.name,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || "Publish failed");
+      }
+
+      setPublishedId(result.portfolio.slug);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Publish failed");
+      } else {
+        setError("Publish failed");
+      }
+    } finally {
+      setIsPublishing(false);
     }
-    setPublishedId(id);
-    return id;
   };
 
   return (
@@ -73,13 +136,18 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       value={{
         data,
         currentStep,
+        publishedId,
+        isPublishing,
+        error,
+
         setCurrentStep,
+
         updateTemplate,
         updatePersonalInfo,
         updateSkills,
         updateProjects,
         updateExperience,
-        publishedId,
+
         publishPortfolio,
       }}
     >
@@ -89,8 +157,11 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 }
 
 export function usePortfolio() {
-  const ctx = useContext(PortfolioContext);
-  if (!ctx)
-    throw new Error("usePortfolio must be used within PortfolioProvider");
-  return ctx;
+  const context = useContext(PortfolioContext);
+
+  if (!context) {
+    throw new Error("usePortfolio must be used inside PortfolioProvider");
+  }
+
+  return context;
 }

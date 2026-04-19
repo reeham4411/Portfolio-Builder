@@ -83,15 +83,22 @@ export default function PreviewPage() {
     if (params.id === "demo") {
       return demoData;
     }
+
     const stored = localStorage.getItem(`portfolio_${params.id}`);
     return stored ? JSON.parse(stored) : null;
   });
 
   if (!portfolioData) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-(--bg) text-(--text)">
-        <p className="text-(--text-muted)">Portfolio not found.</p>
-        <Link href="/builder" className="text-(--accent) hover:underline">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-(--bg) text-(--text) px-6">
+        <p className="text-xl md:text-2xl text-(--text-muted)">
+          Portfolio not found.
+        </p>
+
+        <Link
+          href="/builder"
+          className="text-xl md:text-2xl font-semibold text-(--accent) hover:underline"
+        >
           Build yours →
         </Link>
       </div>
@@ -106,16 +113,21 @@ export default function PreviewPage() {
         : MinimalistTemplate;
 
   return (
-    <div className="relative">
-      <div className="fixed bottom-6 right-6 z-50">
+    <div className="relative scale-[1.08] origin-top min-h-screen pb-24">
+      {/* Floating CTA Button */}
+      <div className="fixed bottom-8 right-8 z-50">
         <Link
           href="/builder"
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-black shadow-lg hover:scale-105 transition-all"
-          style={{ background: "linear-gradient(135deg, #7c6aff, #ff6b9d)" }}
+          className="flex items-center gap-3 px-8 py-5 rounded-full text-lg md:text-xl font-semibold text-black shadow-2xl hover:scale-105 transition-all duration-300"
+          style={{
+            background: "linear-gradient(135deg, #7c6aff, #ff6b9d)",
+          }}
         >
           Build yours with folio →
         </Link>
       </div>
+
+      {/* Template */}
       <Template data={portfolioData} />
     </div>
   );

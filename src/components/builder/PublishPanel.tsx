@@ -6,26 +6,35 @@ import { useState } from "react";
 import { Check, Copy, Globe, Rocket } from "lucide-react";
 
 export default function PublishPanel() {
-  const { data, publishPortfolio, publishedId, setCurrentStep } =
-    usePortfolio();
-  const [loading, setLoading] = useState(false);
+  const {
+    data,
+    publishPortfolio,
+    publishedId,
+    setCurrentStep,
+    isPublishing,
+    error,
+  } = usePortfolio();
+
   const [copied, setCopied] = useState(false);
 
   const handlePublish = async () => {
-    setLoading(true);
-    await new Promise((r) => setTimeout(r, 1500));
-    publishPortfolio();
-    setLoading(false);
+    await publishPortfolio();
   };
 
   const shareUrl = publishedId
-    ? `${typeof window !== "undefined" ? window.location.origin : ""}/preview/${publishedId}`
+    ? `${typeof window !== "undefined" ? window.location.origin : ""}/portfolio/${publishedId}`
     : "";
 
-  const copyLink = () => {
-    navigator.clipboard.writeText(shareUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyLink = async () => {
+    if (!shareUrl) return;
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
   };
 
   return (
@@ -37,7 +46,6 @@ export default function PublishPanel() {
         <p className="text-(--text-muted) text-sm">Go live with one click.</p>
       </div>
 
-      {/* Summary */}
       <div className="space-y-3">
         {[
           [
@@ -59,15 +67,21 @@ export default function PublishPanel() {
         ))}
       </div>
 
+      {error ? (
+        <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-4 text-sm text-red-400">
+          {error}
+        </div>
+      ) : null}
+
       {!publishedId ? (
         <Button
           onClick={handlePublish}
-          loading={loading}
+          loading={isPublishing}
           className="w-full"
           size="lg"
         >
           <Rocket size={18} />
-          {loading ? "Publishing..." : "Publish Now"}
+          {isPublishing ? "Publishing..." : "Publish Now"}
         </Button>
       ) : (
         <div className="space-y-4">
@@ -76,19 +90,24 @@ export default function PublishPanel() {
               <Check size={16} />
               Your portfolio is live!
             </div>
+
             <div className="flex items-center gap-2 bg-(--bg) rounded-lg p-2.5 border border-(--border)">
               <Globe size={14} className="text-(--text-muted) shrink-0" />
               <span className="text-sm font-mono text-(--text-muted) flex-1 truncate">
                 {shareUrl}
               </span>
+
               <button
                 onClick={copyLink}
                 className="shrink-0 text-(--accent) hover:text-(--text) transition-colors"
+                aria-label="Copy portfolio link"
+                type="button"
               >
                 {copied ? <Check size={15} /> : <Copy size={15} />}
               </button>
             </div>
           </div>
+
           <a href={shareUrl} target="_blank" rel="noopener noreferrer">
             <Button variant="secondary" className="w-full">
               <Globe size={15} /> Open Portfolio

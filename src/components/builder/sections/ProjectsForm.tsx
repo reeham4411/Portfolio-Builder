@@ -137,7 +137,7 @@ export default function ProjectsForm() {
                     updateProject(project.id, {
                       techStack: e.target.value
                         .split(",")
-                        .map((t) => t.trim())
+                        .map((item) => item.trim())
                         .filter(Boolean),
                     })
                   }

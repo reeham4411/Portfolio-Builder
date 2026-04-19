@@ -22,18 +22,20 @@ export default function PreviewPane() {
   return (
     <div className="flex flex-col h-full">
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-(--border) bg-(--surface)">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-red-500/60" />
-          <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-          <div className="w-3 h-3 rounded-full bg-green-500/60" />
+      <div className="flex items-center justify-between px-6 py-4 border-b border-(--border) bg-(--surface)">
+        <div className="flex items-center gap-3">
+          <div className="w-4 h-4 rounded-full bg-red-500/60" />
+          <div className="w-4 h-4 rounded-full bg-yellow-500/60" />
+          <div className="w-4 h-4 rounded-full bg-green-500/60" />
         </div>
-        <div className="flex-1 mx-6">
-          <div className="mx-auto max-w-56 h-6 rounded-md border border-(--border) bg-(--bg) flex items-center px-3 text-(--text-muted) text-xs font-mono">
+
+        <div className="flex-1 mx-8">
+          <div className="mx-auto max-w-72 h-10 rounded-lg border border-(--border) bg-(--bg) flex items-center px-4 text-(--text-muted) text-sm font-mono">
             folio.app/preview
           </div>
         </div>
-        <div className="flex items-center gap-1 p-1 rounded-lg bg-(--bg)">
+
+        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-(--bg)">
           {(
             [
               ["desktop", Monitor],
@@ -44,13 +46,13 @@ export default function PreviewPane() {
               key={d}
               onClick={() => setDevice(d)}
               className={cn(
-                "p-1.5 rounded-md transition-all",
+                "p-2.5 rounded-lg transition-all",
                 device === d
                   ? "bg-(--surface-2) text-(--text)"
                   : "text-(--text-muted) hover:text-(--text)",
               )}
             >
-              <Icon size={15} />
+              <Icon size={18} />
             </button>
           ))}
         </div>

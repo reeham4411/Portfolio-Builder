@@ -1,45 +1,57 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireAuthUser } from "@/lib/auth";
+import { groqComplete } from "@/lib/groq";
+
+const SYSTEM_PROMPT = `You are an expert portfolio writing assistant.
+You help professionals write compelling content for their portfolio websites.
+Your tone is confident, concise, and human — never robotic or generic.
+Always write in first person unless asked otherwise.
+Keep responses focused and under 150 words unless a list is requested.
+If you generate a bio or project description the user can apply directly,
+end your response with one of these tags on its own line:
+[APPLY:bio] — if the entire response is a ready-to-use bio
+[APPLY:projectDesc] — if the entire response is a ready-to-use project description
+Do not explain the tag. Just place it at the end.`;
 
 export async function POST(req: NextRequest) {
   try {
+    // Auth guard — AI is only for logged-in users
+    await requireAuthUser();
+
     const { prompt } = await req.json();
 
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-        max_tokens: 1000,
-      }),
-    });
+    if (!prompt || typeof prompt !== "string") {
+      return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
+    }
 
-    const data = await response.json();
-
-    if (!response.ok) {
+    if (prompt.length > 2000) {
       return NextResponse.json(
-        {
-          error: data?.error?.message || "Groq API request failed",
-        },
-        { status: response.status }
+        { error: "Prompt too long (max 2000 characters)" },
+        { status: 400 },
       );
     }
 
-    const content = data?.choices?.[0]?.message?.content || "";
+    const content = await groqComplete({
+      system: SYSTEM_PROMPT,
+      user: prompt,
+      maxTokens: 600,
+    });
 
     return NextResponse.json({ content });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Invalid request or server error" },
-      { status: 500 }
-    );
+  }  catch (err: unknown) {
+  console.error("AI route error:", err);
+
+  if (err instanceof Error && err.message === "UNAUTHORIZED") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-}
+
+  return NextResponse.json(
+    {
+      error:
+        err instanceof Error
+          ? err.message
+          : "AI generation failed. Please try again.",
+    },
+    { status: 500 },
+  );
+}}

@@ -14,17 +14,23 @@ export default function BuilderLayout() {
         style={{ background: "var(--bg)" }}
       >
         {/* Top bar */}
-        <header className="flex items-center justify-between px-6 py-3 border-b border-(--border) bg-(--surface) shrink-0 z-10">
-          <Link href="/" className="font-display text-xl font-bold">
+        <header className="flex items-center justify-between px-8 py-4 border-b border-(--border) bg-(--surface) shrink-0 z-10">
+          <Link
+            href="/"
+            className="font-display text-6xl font-bold tracking-tight"
+          >
             <span className="gradient-text">folio</span>
             <span className="text-(--text-muted)">.</span>
           </Link>
-          <div className="flex-1 mx-8 overflow-x-auto">
+
+          <div className="flex-1 mx-10 overflow-x-auto">
             <StepNav />
           </div>
-          <div className="text-xs text-(--text-muted) shrink-0">Auto-saved</div>
-        </header>
 
+          <div className="text-lg font-medium text-(--text-muted) shrink-0">
+            Auto-saved
+          </div>
+        </header>
         {/* Main 2-column layout */}
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar */}

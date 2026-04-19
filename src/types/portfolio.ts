@@ -16,7 +16,7 @@ export interface PersonalInfo {
 export interface Skill {
   id: string;
   name: string;
-  level: number; // 1-5
+  level: number;
   category: string;
 }
 
@@ -48,4 +48,36 @@ export interface PortfolioData {
   experience: Experience[];
 }
 
-export type BuilderStep = "template" | "personal" | "skills" | "projects" | "experience" | "publish";
+export type BuilderStep =
+  | "template"
+  | "personal"
+  | "skills"
+  | "projects"
+  | "experience"
+  | "publish";
+
+// Database row types 
+
+export interface PortfolioRow {
+  id: string;
+  user_id: string;
+  title: string;
+  slug: string | null;
+  template_id: TemplateId;
+  content_json: {
+    personalInfo: PersonalInfo;
+    skills: Skill[];
+    projects: Project[];
+    experience: Experience[];
+  };
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProfileRow {
+  id: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+}

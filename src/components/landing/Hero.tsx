@@ -1,9 +1,37 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { ArrowRight, Globe } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Hero() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setIsLoggedIn(!!user);
+    };
+
+    checkUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session?.user);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background mesh */}
@@ -27,12 +55,41 @@ export default function Hero() {
           <span className="text-(--text-muted)">.</span>
         </span>
 
-        <Link
-          href="/builder"
-          className="flex items-center gap-2 text-xl font-semibold px-10 py-5 rounded-full border border-(--border) hover:border-(--accent) hover:text-(--accent) transition-all duration-300"
-        >
-          Start Building <ArrowRight size={18} />
-        </Link>
+        <div className="flex items-center gap-4">
+          {!isLoggedIn && (
+            <>
+              <Link
+                href="/login"
+                className="flex items-center gap-2 text-lg font-semibold px-6 py-3 rounded-full border border-(--border) hover:border-(--accent) hover:text-(--accent) transition-all duration-300"
+              >
+                Login
+              </Link>
+
+              <Link
+                href="/signup"
+                className="flex items-center gap-2 text-lg font-semibold px-6 py-3 rounded-full border border-(--border) hover:border-(--accent) hover:text-(--accent) transition-all duration-300"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
+
+          {isLoggedIn ? (
+            <Link
+              href="/builder"
+              className="flex items-center gap-2 text-xl font-semibold px-10 py-5 rounded-full border border-(--border) hover:border-(--accent) hover:text-(--accent) transition-all duration-300"
+            >
+              Start Building <ArrowRight size={18} />
+            </Link>
+          ) : (
+            <button
+              disabled
+              className="flex items-center gap-2 text-xl font-semibold px-10 py-5 rounded-full border border-(--border) opacity-50 cursor-not-allowed"
+            >
+              Start Building <ArrowRight size={18} />
+            </button>
+          )}
+        </div>
       </nav>
 
       {/* Hero content */}
@@ -51,20 +108,35 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0 animate-fade-up animate-delay-300">
-          <Link
-            href="/builder"
-            className="group flex items-center gap-3 px-10 py-6 rounded-full text-black font-semibold text-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(124,106,255,0.4)]"
-            style={{
-              background:
-                "linear-gradient(135deg, var(--accent), var(--accent-2))",
-            }}
-          >
-            Build My Portfolio
-            <ArrowRight
-              size={18}
-              className="group-hover:translate-x-1 transition-transform"
-            />
-          </Link>
+          {isLoggedIn ? (
+            <Link
+              href="/builder"
+              className="group flex items-center gap-3 px-10 py-6 rounded-full text-black font-semibold text-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(124,106,255,0.4)]"
+              style={{
+                background:
+                  "linear-gradient(135deg, var(--accent), var(--accent-2))",
+              }}
+            >
+              Build My Portfolio
+              <ArrowRight
+                size={18}
+                className="group-hover:translate-x-1 transition-transform"
+              />
+            </Link>
+          ) : (
+            <button
+              disabled
+              className="group flex items-center gap-3 px-10 py-6 rounded-full text-black font-semibold text-xl opacity-50 cursor-not-allowed"
+              style={{
+                background:
+                  "linear-gradient(135deg, var(--accent), var(--accent-2))",
+              }}
+            >
+              Build My Portfolio
+              <ArrowRight size={18} />
+            </button>
+          )}
+
           <Link
             href="/preview/demo"
             className="flex items-center gap-2 px-10 py-6 rounded-full border border-(--border) text-xl font-semibold text-(--text-muted) hover:text-var(--text) hover:border-(--text) transition-all duration-300"

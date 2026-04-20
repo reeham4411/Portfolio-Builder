@@ -43,9 +43,17 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
         body: JSON.stringify({ portfolioId: id }),
       });
 
-      if (res.ok) {
-        setPortfolios((prev) => prev.filter((p) => p.id !== id));
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || "Failed to delete portfolio");
       }
+
+      setPortfolios((prev) => prev.filter((p) => p.id !== id));
+      router.refresh();
+    } catch (error) {
+      console.error("Delete failed:", error);
+      alert("Failed to delete portfolio. Please try again.");
     } finally {
       setDeletingId(null);
     }
@@ -71,6 +79,7 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
               .
             </span>
           </Link>
+
           <div className="flex items-center gap-4">
             <span className="text-sm text-(--text-muted) hidden sm:block">
               {user.email}
@@ -99,6 +108,7 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
                 : `${portfolios.length} portfolio${portfolios.length > 1 ? "s" : ""}`}
             </p>
           </div>
+
           <Link
             href="/builder"
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-black"
@@ -113,7 +123,6 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
         </div>
 
         {portfolios.length === 0 ? (
-          /* Empty state */
           <div className="text-center py-24 rounded-2xl border border-dashed border-(--border)">
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-5 flex items-center justify-center"
@@ -124,12 +133,15 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
             >
               <Plus size={24} className="text-white" />
             </div>
+
             <h2 className="font-display text-xl font-bold mb-2">
               Create your first portfolio
             </h2>
+
             <p className="text-(--text-muted) text-sm mb-6 max-w-xs mx-auto">
               Pick a template, fill in your details, and publish in minutes.
             </p>
+
             <Link
               href="/builder"
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-black"
@@ -148,7 +160,6 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
                 key={portfolio.id}
                 className="group rounded-2xl border border-(--border) bg-(--surface) p-5 hover:border-(--accent)/40 transition-all duration-300"
               >
-                {/* Template color bar */}
                 <div
                   className="h-1.5 rounded-full mb-4"
                   style={{
@@ -166,6 +177,7 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
                     <h3 className="font-semibold text-sm truncate">
                       {portfolio.title}
                     </h3>
+
                     <div className="flex items-center gap-1.5 mt-1">
                       {portfolio.is_published ? (
                         <span className="flex items-center gap-1 text-xs text-emerald-400">
@@ -178,7 +190,9 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
                           Draft
                         </span>
                       )}
+
                       <span className="text-(--text-muted) text-xs">·</span>
+
                       <span className="text-xs text-(--text-muted) capitalize">
                         {portfolio.template_id}
                       </span>
@@ -190,7 +204,6 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
                   Updated {formatDate(portfolio.updated_at)}
                 </p>
 
-                {/* Actions */}
                 <div className="flex items-center gap-2">
                   <Link
                     href={`/builder?id=${portfolio.id}`}
@@ -204,6 +217,7 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
                     <Link
                       href={`/portfolio/${portfolio.slug}`}
                       target="_blank"
+                      rel="noopener noreferrer"
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-(--border) text-xs text-(--text-muted) hover:text-(--text) transition-all"
                     >
                       <ExternalLink size={12} />

@@ -69,6 +69,13 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [isLoadingPortfolio, setIsLoadingPortfolio] = useState(false);
 
+  const clearStoredPortfolioId = () => {
+    setPortfolioId(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(PORTFOLIO_ID_KEY);
+    }
+  };
+
   // local restore only when NOT editing an existing saved portfolio
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -222,14 +229,16 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     }));
   };
 
-  const saveDraft = async (): Promise<string> => {
+  const saveDraft = async (
+    overridePortfolioId?: string | null,
+  ): Promise<string> => {
     const res = await fetch("/api/portfolio/save", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        portfolioId,
+        portfolioId: overridePortfolioId ?? portfolioId,
         title: `${data.personalInfo.name || "Untitled"} Portfolio`,
         templateId: data.templateId,
         content: data,
@@ -249,6 +258,11 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     }
 
     setPortfolioId(savedId);
+
+    if (typeof window !== "undefined" && !builderId) {
+      localStorage.setItem(PORTFOLIO_ID_KEY, savedId);
+    }
+
     return savedId;
   };
 
@@ -260,10 +274,10 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
       let currentPortfolioId = portfolioId;
 
       if (!currentPortfolioId) {
-        currentPortfolioId = await saveDraft();
+        currentPortfolioId = await saveDraft(null);
       }
 
-      const res = await fetch("/api/portfolio/publish", {
+      let res = await fetch("/api/portfolio/publish", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -274,7 +288,27 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
         }),
       });
 
-      const result = await res.json();
+      let result = await res.json();
+
+      // stale deleted / missing id: clear it, save again, retry publish
+      if (!res.ok && res.status === 404) {
+        clearStoredPortfolioId();
+
+        currentPortfolioId = await saveDraft(null);
+
+        res = await fetch("/api/portfolio/publish", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            portfolioId: currentPortfolioId,
+            fullName: data.personalInfo.name,
+          }),
+        });
+
+        result = await res.json();
+      }
 
       if (!res.ok) {
         throw new Error(result.error || "Publish failed");

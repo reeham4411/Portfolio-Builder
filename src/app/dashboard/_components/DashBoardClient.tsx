@@ -21,10 +21,26 @@ interface Props {
   portfolios: PortfolioRow[];
 }
 
+const STORAGE_KEY = "portfolio_builder_draft";
+const STEP_KEY = "portfolio_builder_step";
+const PORTFOLIO_ID_KEY = "portfolio_builder_portfolio_id";
+
 export default function DashboardClient({ user, portfolios: initial }: Props) {
   const router = useRouter();
   const [portfolios, setPortfolios] = useState<PortfolioRow[]>(initial);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const clearBuilderState = () => {
+    if (typeof window === "undefined") return;
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STEP_KEY);
+    localStorage.removeItem(PORTFOLIO_ID_KEY);
+  };
+
+  const handleNewPortfolio = () => {
+    clearBuilderState();
+    router.push("/builder");
+  };
 
   const handleSignOut = async () => {
     const supabase = createClient();
@@ -109,17 +125,18 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
             </p>
           </div>
 
-          <Link
-            href="/builder"
+          <button
+            onClick={handleNewPortfolio}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-black"
             style={{
               background:
                 "linear-gradient(135deg, var(--accent), var(--accent-2))",
             }}
+            type="button"
           >
             <Plus size={15} />
             New portfolio
-          </Link>
+          </button>
         </div>
 
         {portfolios.length === 0 ? (
@@ -142,16 +159,17 @@ export default function DashboardClient({ user, portfolios: initial }: Props) {
               Pick a template, fill in your details, and publish in minutes.
             </p>
 
-            <Link
-              href="/builder"
+            <button
+              onClick={handleNewPortfolio}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-black"
               style={{
                 background:
                   "linear-gradient(135deg, var(--accent), var(--accent-2))",
               }}
+              type="button"
             >
               Get started
-            </Link>
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

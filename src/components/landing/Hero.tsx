@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowRight, Globe } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowRight, Globe, LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export default function Hero() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const supabase = createClient();
@@ -31,6 +33,13 @@ export default function Hero() {
       subscription.unsubscribe();
     };
   }, []);
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setIsLoggedIn(false);
+    router.push("/login");
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -80,12 +89,22 @@ export default function Hero() {
           )}
 
           {isLoggedIn && (
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-2 text-sm md:text-base font-semibold px-4 md:px-5 py-2.5 rounded-full border border-(--border) hover:border-(--accent) hover:text-(--accent) transition-all duration-300"
-            >
-              Saved Portfolios
-            </Link>
+            <>
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2 text-sm md:text-base font-semibold px-4 md:px-5 py-2.5 rounded-full border border-(--border) hover:border-(--accent) hover:text-(--accent) transition-all duration-300"
+              >
+                Saved Portfolios
+              </Link>
+
+              <button
+                onClick={handleSignOut}
+                className="flex items-center gap-2 text-sm md:text-base font-semibold px-4 md:px-5 py-2.5 rounded-full border border-(--border) hover:border-(--accent) hover:text-(--accent) transition-all duration-300"
+              >
+                <LogOut size={16} />
+                Sign Out
+              </button>
+            </>
           )}
 
           {isLoggedIn ? (
@@ -107,7 +126,7 @@ export default function Hero() {
       </nav>
 
       <div className="relative z-10 text-center max-w-6xl mx-auto px-6 pt-24">
-        <h1 className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-[8rem] xl:text-[9rem] font-black leading-[0.9] tracking-tight mb-8 opacity-0 animate-fade-up animate-delay-100">
+        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.95] tracking-tight mb-8 opacity-0 animate-fade-up animate-delay-100">
           Your work,
           <br />
           <span className="gradient-text">beautifully</span>

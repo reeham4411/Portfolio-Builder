@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, Check, Monitor, Smartphone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TemplateId } from "@/types/portfolio";
 import Badge from "@/components/ui/Badge";
+import { createClient } from "@/lib/supabase/client";
 
 interface TemplateConfig {
   id: TemplateId;
@@ -346,6 +347,31 @@ const previewComponents: Record<TemplateId, React.FC<{ accent: string }>> = {
 export default function TemplateShowcase() {
   const [active, setActive] = useState<TemplateId>("bold");
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setIsLoggedIn(!!user);
+    };
+
+    checkUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session?.user);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const activeTemplate = templates.find((t) => t.id === active)!;
   const Preview = previewComponents[active];
@@ -448,17 +474,31 @@ export default function TemplateShowcase() {
               </button>
             ))}
 
-            <Link
-              href="/builder"
-              className="mt-3 flex items-center justify-center gap-3 py-5 px-8 rounded-3xl text-lg md:text-xl font-semibold text-black transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(124,106,255,0.3)]"
-              style={{
-                background:
-                  "linear-gradient(135deg, var(--accent), var(--accent-2))",
-              }}
-            >
-              Use {activeTemplate.name} Template
-              <ArrowRight size={20} />
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                href="/builder"
+                className="mt-3 flex items-center justify-center gap-3 py-5 px-8 rounded-3xl text-lg md:text-xl font-semibold text-black transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(124,106,255,0.3)]"
+                style={{
+                  background:
+                    "linear-gradient(135deg, var(--accent), var(--accent-2))",
+                }}
+              >
+                Use {activeTemplate.name} Template
+                <ArrowRight size={20} />
+              </Link>
+            ) : (
+              <button
+                disabled
+                className="mt-3 flex items-center justify-center gap-3 py-5 px-8 rounded-3xl text-lg md:text-xl font-semibold text-black opacity-50 cursor-not-allowed"
+                style={{
+                  background:
+                    "linear-gradient(135deg, var(--accent), var(--accent-2))",
+                }}
+              >
+                Use {activeTemplate.name} Template
+                <ArrowRight size={20} />
+              </button>
+            )}
           </div>
 
           {/* Right: live browser frame preview */}

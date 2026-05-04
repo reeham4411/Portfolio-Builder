@@ -56,7 +56,7 @@ export default function Hero() {
         />
       </div>
 
-      <nav className="absolute top-0 left-0 right-0 flex items-center justify-between px-5 md:px-8 py-5 z-10 gap-4">
+      <nav className="absolute top-0 left-0 right-0 flex items-center justify-between px-5 md:px-8 py-5 z-50 gap-4">
         <span className="font-display text-4xl md:text-5xl font-bold tracking-tight shrink-0">
           <span className="gradient-text">folio</span>
           <span className="text-(--text-muted)">.</span>
@@ -125,7 +125,7 @@ export default function Hero() {
         </div>
       </nav>
 
-      <div className="relative z-10 text-center max-w-6xl mx-auto px-6 pt-24">
+      <div className="relative z-0 text-center max-w-6xl mx-auto px-6 pt-24">
         <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.95] tracking-tight mb-8 opacity-0 animate-fade-up animate-delay-100">
           Your work,
           <br />
